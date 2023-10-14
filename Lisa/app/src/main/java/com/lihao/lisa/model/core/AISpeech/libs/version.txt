@@ -1,0 +1,2 @@
+Version of com.aispeech.jar:
+DUI-lite-SDK-for-Android-2.16.1.jar

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="语音识别引擎" >
+        <ListPreference
+            android:key="VR_Engine"
+            android:title="语音识别引擎选择"
+            android:dialogTitle="选择类别"
+            android:entries="@array/VR_Engine"
+            android:entryValues="@array/VR_Engine_Value">
+        </ListPreference>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="语音合成引擎">
+        <ListPreference
+            android:key="TTS_Engine"
+            android:title="语音合成引擎选择"
+            android:dialogTitle="选择类别"
+            android:entries="@array/TTS_Engine"
+            android:entryValues="@array/TTS_Engine_Value">
+        </ListPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

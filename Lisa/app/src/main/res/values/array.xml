@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="VR_Engine">
+        <item>Baidu Online ASR</item>
+        <item>iFlytek Online ASR</item>
+    </string-array>
+    <string-array name="VR_Engine_Value">
+        <item>Baidu</item>
+        <item>iFlytek</item>
+    </string-array>
+
+    <string-array name="TTS_Engine">
+        <item>Baidu Online TTS</item>
+        <item>iFlytek Online TTS</item>
+        <item>AISpeech Online TTS</item>
+    </string-array>
+    <string-array name="TTS_Engine_Value">
+        <item>Baidu</item>
+        <item>iFlytek</item>
+        <item>AISpeech</item>
+    </string-array>
+
+
+</resources>

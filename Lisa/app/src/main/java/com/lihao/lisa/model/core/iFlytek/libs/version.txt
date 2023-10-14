@@ -1,0 +1,2 @@
+Version of com.iflytek.jar
+Msc.jar
