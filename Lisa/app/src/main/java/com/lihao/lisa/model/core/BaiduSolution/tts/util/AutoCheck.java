@@ -12,7 +12,6 @@ import androidx.core.content.ContextCompat;
 import com.baidu.tts.client.SpeechSynthesizer;
 import com.baidu.tts.client.SynthesizerTool;
 import com.baidu.tts.client.TtsMode;
-import com.lihao.lisa.model.core.baidu.tts.control.InitConfig;
 
 import org.json.JSONObject;
 

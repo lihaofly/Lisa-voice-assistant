@@ -1,21 +1,18 @@
-package com.baidu.aip.asrwakeup3.core.recog.listener;
+package com.lihao.lisa.model.core.BaiduSolution.recog.listener;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-import com.baidu.aip.asrwakeup3.core.recog.RecogResult;
 import com.baidu.aip.asrwakeup3.core.util.AsrMessage;
 import com.baidu.speech.asr.SpeechConstant;
+import com.lihao.lisa.model.core.BaiduSolution.recog.listener.IRecogListener;
+import com.lihao.lisa.util.MyLogger;
 
-/**
- * Created by fujiayi on 2017/6/16.
- * Refactor by Lihao on 2021/6/23
- */
-
-public class MessageStatusRecogListener extends StatusRecogListener {
+public class MessageStatusRecogListener implements IRecogListener, IStatus {
+    private static final String TAG = MessageStatusRecogListener.class.getSimpleName();
     private Handler handler;
     private long speechEndTime = 0;
-    private static final String TAG = "Lisa-MSRecogListener";
+    private int status = STATUS_NONE;
+    private final int ASR_MESSAGE = 1;
 
     public MessageStatusRecogListener(Handler handler) {
         this.handler = handler;
@@ -23,8 +20,8 @@ public class MessageStatusRecogListener extends StatusRecogListener {
 
     @Override
     public void onAsrReady() {
-        Log.d(TAG, "onAsrReady");
-        super.onAsrReady();
+        MyLogger.debug(TAG, "onAsrReady()");
+        status = STATUS_READY;
         speechEndTime = 0;
         AsrMessage asrMessage = new AsrMessage(status,SpeechConstant.CALLBACK_EVENT_WAKEUP_READY,
                 "","Asr Engine ready",System.currentTimeMillis());
@@ -33,8 +30,8 @@ public class MessageStatusRecogListener extends StatusRecogListener {
 
     @Override
     public void onAsrBegin() {
-        Log.d(TAG, "onAsrBegin");
-        super.onAsrBegin();
+        MyLogger.debug(TAG, "onAsrBegin()");
+        status = STATUS_SPEAKING;
         AsrMessage asrMessage = new AsrMessage(status,SpeechConstant.CALLBACK_EVENT_ASR_BEGIN,
                 "","Detected speaking begin",System.currentTimeMillis());
         sendStatusMessage(asrMessage);
@@ -42,8 +39,8 @@ public class MessageStatusRecogListener extends StatusRecogListener {
 
     @Override
     public void onAsrEnd() {
-        Log.d(TAG, "onAsrEnd");
-        super.onAsrEnd();
+        MyLogger.debug(TAG, "onAsrEnd()");
+        status = STATUS_RECOGNITION;
         speechEndTime = System.currentTimeMillis();
         AsrMessage asrMessage = new AsrMessage(status,SpeechConstant.CALLBACK_EVENT_ASR_END,
                 "","Detected speaking ending",System.currentTimeMillis());
@@ -52,7 +49,7 @@ public class MessageStatusRecogListener extends StatusRecogListener {
 
     @Override
     public void onAsrPartialResult(String[] results, RecogResult recogResult) {
-        Log.d(TAG, "onAsrPartialResult");
+        MyLogger.debug(TAG, "onAsrPartialResult()");
         AsrMessage asrMessage = new AsrMessage(status,SpeechConstant.CALLBACK_EVENT_ASR_PARTIAL,
                 recogResult.getOrigalJson(),"Detected speaking in process",System.currentTimeMillis());
         sendStatusMessage(asrMessage);
@@ -60,19 +57,19 @@ public class MessageStatusRecogListener extends StatusRecogListener {
 
     @Override
     public void onAsrFinalResult(String[] results, RecogResult recogResult) {
-        super.onAsrFinalResult(results, recogResult);
-        Log.d(TAG, "onAsrFinalResult");
+        MyLogger.debug(TAG, "onAsrFinalResult()");
+        status = STATUS_FINISHED;
 
         AsrMessage asrMessage = new AsrMessage(status,SpeechConstant.CALLBACK_EVENT_ASR_FINISH,
                 recogResult.getOrigalJson(),"Asr Finished",System.currentTimeMillis());
         sendStatusMessage(asrMessage);
 
         if (speechEndTime > 0) {
-            String message = "识别结束，结果是”" + results[0] + "”";
+            String message = "Recognize finish, Result: ”" + results[0] + "”";
             long currentTime = System.currentTimeMillis();
             long diffTime = currentTime - speechEndTime;
-            message += "；说话结束到识别结束耗时[" + diffTime + "ms]" + currentTime;
-            Log.d(TAG, "onAsrFinalResult: message:" + message);
+            message += "; Duration from start speaking to end [" + diffTime + "ms]" + currentTime;
+            MyLogger.debug(TAG, "onAsrFinalResult: message:" + message);
         }
         speechEndTime = 0;
     }
@@ -80,26 +77,25 @@ public class MessageStatusRecogListener extends StatusRecogListener {
     @Override
     public void onAsrFinishError(int errorCode, int subErrorCode, String descMessage,
                                  RecogResult recogResult) {
-        super.onAsrFinishError(errorCode, subErrorCode, descMessage, recogResult);
-        Log.d(TAG, "onAsrFinishError");
-
+        MyLogger.debug(TAG, "onAsrFinishError()");
+        status = STATUS_FINISHED;
         AsrMessage asrMessage = new AsrMessage(status,SpeechConstant.CALLBACK_EVENT_ASR_ERROR,
                 recogResult.getOrigalJson(),"Asr Error happened",System.currentTimeMillis());
         sendStatusMessage(asrMessage);
 
         if (speechEndTime > 0) {
-            String message = "【asr.finish事件】识别错误, 错误码：" + errorCode + " ," + subErrorCode + " ; " + descMessage;
+            String message = "[asr.finish event] Recongnize failed. Error code: " + errorCode + " ," + subErrorCode + " ; " + descMessage;
             long diffTime = System.currentTimeMillis() - speechEndTime;
-            message += "。说话结束到识别结束耗时【" + diffTime + "ms】";
-            Log.d(TAG, "onAsrFinishError: error: " + message);
+            message += ". Duration from start speaking to end[" + diffTime + "ms]";
+            MyLogger.debug(TAG, "onAsrFinishError: error: " + message);
         }
         speechEndTime = 0;
     }
 
     @Override
     public void onAsrOnlineNluResult(String nluResult) {
-        super.onAsrOnlineNluResult(nluResult);
-        Log.d(TAG, "onAsrOnlineNluResult");
+        MyLogger.debug(TAG, "onAsrOnlineNluResult()");
+        status = STATUS_FINISHED;
         if (!nluResult.isEmpty()) {
             AsrMessage asrMessage = new AsrMessage(STATUS_NLU_FINISHED,SpeechConstant.CALLBACK_EVENT_ASR_FINISH,
                     nluResult,"Online ASR in processing",System.currentTimeMillis());
@@ -109,64 +105,73 @@ public class MessageStatusRecogListener extends StatusRecogListener {
 
     @Override
     public void onAsrFinish(RecogResult recogResult) {
-        super.onAsrFinish(recogResult);
-        Log.d(TAG, "onAsrFinish");
+        MyLogger.debug(TAG, "onAsrFinish()");
+        status = STATUS_FINISHED;
         AsrMessage asrMessage = new AsrMessage(STATUS_ALL_FINISHED,SpeechConstant.CALLBACK_EVENT_ASR_FINISH,
                 recogResult.getOrigalJson(),"ASR Finish",System.currentTimeMillis());
         sendStatusMessage(asrMessage);
     }
 
-    /**
-     * 长语音识别结束
-     */
     @Override
     public void onAsrLongFinish() {
-        super.onAsrLongFinish();
-        Log.d(TAG, "onAsrLongFinish");
+        MyLogger.debug(TAG, "onAsrLongFinish()");
+        status = STATUS_LONG_SPEECH_FINISHED;
         AsrMessage asrMessage = new AsrMessage(status,SpeechConstant.CALLBACK_EVENT_ASR_LONG_SPEECH,
                 "","long ASR Finish",System.currentTimeMillis());
         sendStatusMessage(asrMessage);
     }
 
-
-    /**
-     * 使用离线命令词时，有该回调说明离线语法资源加载成功
-     */
     @Override
     public void onOfflineLoaded() {
-        Log.d(TAG, "onOfflineLoaded");
+        MyLogger.debug(TAG, "onOfflineLoaded()");
         AsrMessage asrMessage = new AsrMessage(status,SpeechConstant.CALLBACK_EVENT_ASR_LOADED,
                 "","离线资源加载成功。没有此回调可能离线语法功能不能使用。",System.currentTimeMillis());
         sendStatusMessage(asrMessage);
     }
 
-    /**
-     * 使用离线命令词时，有该回调说明离线语法资源加载成功
-     */
     @Override
     public void onOfflineUnLoaded() {
-        Log.d(TAG, "onOfflineUnLoaded");
+        MyLogger.debug(TAG, "onOfflineUnLoaded()");
         AsrMessage asrMessage = new AsrMessage(status,SpeechConstant.CALLBACK_EVENT_ASR_UNLOADED,
-                "","离线资源卸载成功",System.currentTimeMillis());
+                "","Unload offline resource successful",System.currentTimeMillis());
         sendStatusMessage(asrMessage);
     }
 
     @Override
     public void onAsrExit() {
-        super.onAsrExit();
-        Log.d(TAG, "onAsrExit");
+        MyLogger.debug(TAG, "onAsrExit()");
+        status = STATUS_NONE;
         AsrMessage asrMessage = new AsrMessage(status,SpeechConstant.CALLBACK_EVENT_ASR_EXIT,
                 "","Asr finish, Engine to ready",System.currentTimeMillis());
         sendStatusMessage(asrMessage);
     }
 
+    @Override
+    public void onAsrAudio(byte[] data, int offset, int length) {
+        MyLogger.debug(TAG, "onAsrAudio()");
+        if (offset != 0 || data.length != length) {
+            byte[] actualData = new byte[length];
+            System.arraycopy(data, 0, actualData, 0, length);
+            data = actualData;
+        }
+
+        MyLogger.debug(TAG, "Audio data callback, length:" + data.length);
+    }
+
+    @Override
+    public void onAsrVolume(int volumePercent, int volume) {
+        MyLogger.debug(TAG, "onAsrVolume()");
+        MyLogger.debug(TAG, "Audio volume percentage: " + volumePercent + " ; volume: " + volume);
+    }
+
+
     private void sendStatusMessage(AsrMessage asrMessage) {
 
         if (handler == null) {
-            Log.d(TAG, "sendStatusMessage: handler is null");
+            MyLogger.debug(TAG, "sendStatusMessage: handler is null");
             return;
         }
-        Log.d(TAG, "sendStatusMessage: " + asrMessage.toString());
+        MyLogger.debug(TAG, "sendStatusMessage: " + asrMessage.toString());
 
         Message msg = Message.obtain();
         msg.what = ASR_MESSAGE;
@@ -181,7 +186,7 @@ public class MessageStatusRecogListener extends StatusRecogListener {
             message += "  ;time=" + System.currentTimeMillis();
         }
         if (handler == null) {
-            Log.i(TAG, message);
+            MyLogger.info(TAG, message);
             return;
         }
         Message msg = Message.obtain();

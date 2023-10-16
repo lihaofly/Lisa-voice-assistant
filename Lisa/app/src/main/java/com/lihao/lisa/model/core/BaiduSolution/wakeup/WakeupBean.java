@@ -1,4 +1,4 @@
-package com.lihao.lisa.model.core.baidu.wakeup;
+package com.lihao.lisa.model.core.BaiduSolution.wakeup;
 
 import java.io.Serializable;
 
@@ -16,4 +16,8 @@ public class WakeupBean implements Serializable {
     private String errorDesc;
     private int errorCode;
     private String word;
+
+    public int getErrorCode(){
+        return 0;
+    }
 }

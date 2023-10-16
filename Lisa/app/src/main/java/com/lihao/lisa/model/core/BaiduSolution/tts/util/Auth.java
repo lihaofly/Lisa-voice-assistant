@@ -2,8 +2,8 @@ package com.lihao.lisa.model.core.baidu.tts.util;
 
 import android.content.Context;
 
-import java.io.IOException;
-import java.io.InputStream;
+import com.lihao.lisa.model.core.baidu.auth.AuthUtil;
+
 import java.util.Properties;
 
 public class Auth {
@@ -18,7 +18,12 @@ public class Auth {
     private String sn; // 收费纯离线版本需要序列号，离在线版本不需要
 
     private Auth(Context context) {
-        Properties prop = load(context);
+        Properties prop = new Properties();
+        prop.setProperty("appId", AuthUtil.getAppId());
+        prop.setProperty("appKey", AuthUtil.getAk());
+        prop.setProperty("secretKey", AuthUtil.getSk());
+        prop.setProperty("applicationId", AuthUtil.getApplicationID());
+
         String applicationId = getProperty(prop, "applicationId");
 
         if (!context.getPackageName().equals(applicationId)) {
@@ -68,19 +73,6 @@ public class Auth {
             throw new AuthCheckException("在 assets/auth.properties里没有设置 " + key);
         }
         return value.trim();
-    }
-
-    private Properties load(Context context) {
-        try {
-            InputStream is = context.getAssets().open("auth.properties");
-            Properties prop = new Properties();
-            prop.load(is);
-            is.close();
-            return prop;
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new AuthCheckException(e);
-        }
     }
 
     public static class AuthCheckException extends RuntimeException {

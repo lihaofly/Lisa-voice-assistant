@@ -25,7 +25,7 @@ import static com.lihao.lisa.model.core.baidu.tts.util.IOfflineResourceConst.VOI
 
 public class BaiduTTS extends BaseTTS {
     private static BaiduTTS mInstance = null;
-    private static final String TAG = "BaiduTTS";
+    private static final String TAG = BaiduTTS.class.getSimpleName();
     private Context mContext;
     private Handler mHandler;
     private MessageListener mMsgListener;

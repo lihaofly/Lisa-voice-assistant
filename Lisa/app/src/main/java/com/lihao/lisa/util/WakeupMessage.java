@@ -1,6 +1,6 @@
 package com.lihao.lisa.util;
 
-import com.lihao.lisa.model.core.baidu.wakeup.WakeupBean;
+import com.lihao.lisa.model.core.BaiduSolution.wakeup.WakeupBean;
 import com.lihao.lisa.view.util.User;
 
 public class WakeupMessage extends AssistantMessage{

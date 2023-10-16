@@ -7,22 +7,12 @@ import android.os.Message;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
-
-import com.baidu.aip.asrwakeup3.core.inputstream.InFileStream;
-import com.baidu.aip.asrwakeup3.core.recog.MyRecognizer;
-import com.baidu.aip.asrwakeup3.core.recog.listener.IRecogListener;
-import com.baidu.aip.asrwakeup3.core.recog.listener.MessageStatusRecogListener;
-import com.baidu.speech.EventListener;
-import com.baidu.speech.EventManager;
-import com.baidu.speech.EventManagerFactory;
-import com.baidu.speech.asr.SpeechConstant;
-import com.lihao.lisa.model.core.baidu.tts.BaiduTTS;
-import com.lihao.lisa.model.core.baidu.tts.listener.MessageListener;
-import com.lihao.lisa.model.core.baidu.tts.listener.UiMessageListener;
-import com.lihao.lisa.model.core.baidu.wakeup.BaiduWakeup;
+import com.lihao.lisa.model.core.BaiduSolution.recog.BaiduRecognizer;
+import com.lihao.lisa.model.core.BaiduSolution.recog.listener.IRecogListener;
+import com.lihao.lisa.model.core.BaiduSolution.recog.listener.MessageStatusRecogListener;
+import com.lihao.lisa.model.core.BaiduSolution.wakeup.BaiduWakeup;
 import com.lihao.lisa.model.core.base.BaseTTS;
 import com.lihao.lisa.model.core.base.FactoryTTS;
-import com.lihao.lisa.model.features.weather.Weather;
 import com.lihao.lisa.model.util.statemachine.State;
 import com.lihao.lisa.model.util.statemachine.StateMachine;
 import com.lihao.lisa.presenter.PresenterListener;
@@ -35,32 +25,26 @@ import org.json.JSONObject;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateEncodingException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
-import java.util.TreeMap;
 
-import static com.baidu.aip.asrwakeup3.core.recog.IStatus.ASR_MESSAGE;
-import static com.baidu.aip.asrwakeup3.core.recog.IStatus.STATUS_ALL_FINISHED;
-import static com.baidu.aip.asrwakeup3.core.recog.IStatus.STATUS_FINISHED;
-import static com.baidu.aip.asrwakeup3.core.recog.IStatus.STATUS_NLU_FINISHED;
-import static com.baidu.aip.asrwakeup3.core.recog.IStatus.STATUS_NONE;
-import static com.baidu.aip.asrwakeup3.core.recog.IStatus.STATUS_READY;
-import static com.baidu.aip.asrwakeup3.core.recog.IStatus.STATUS_RECOGNITION;
-import static com.baidu.aip.asrwakeup3.core.recog.IStatus.STATUS_SPEAKING;
-import static com.lihao.lisa.model.core.baidu.tts.MainHandlerConstant.UI_CHANGE_INPUT_TEXT_SELECTION;
-import static com.lihao.lisa.model.core.baidu.tts.MainHandlerConstant.UI_CHANGE_SYNTHES_TEXT_FINISHED;
+import static com.lihao.lisa.model.core.BaiduSolution.recog.listener.IStatus.STATUS_ALL_FINISHED;
+import static com.lihao.lisa.model.core.BaiduSolution.recog.listener.IStatus.STATUS_FINISHED;
+import static com.lihao.lisa.model.core.BaiduSolution.recog.listener.IStatus.STATUS_NLU_FINISHED;
+import static com.lihao.lisa.model.core.BaiduSolution.recog.listener.IStatus.STATUS_NONE;
+import static com.lihao.lisa.model.core.BaiduSolution.recog.listener.IStatus.STATUS_READY;
+import static com.lihao.lisa.model.core.BaiduSolution.recog.listener.IStatus.STATUS_RECOGNITION;
+import static com.lihao.lisa.model.core.BaiduSolution.recog.listener.IStatus.STATUS_SPEAKING;
 import static com.lihao.lisa.model.core.base.FactoryTTS.AISPEECH_ONLINE_TTS;
 import static com.lihao.lisa.model.core.base.FactoryTTS.BAIDU_ONLINE_TTS;
 import static com.lihao.lisa.model.core.base.FactoryTTS.IFLYTEK_ONLINE_TTS;
 import static com.lihao.lisa.util.BaseMessage.EUROPECUP_MESSAGE;
 import static com.lihao.lisa.util.BaseMessage.EXCUTE_MESSAGE;
 import static com.lihao.lisa.util.BaseMessage.TTS_MESSAGE;
+import static com.lihao.lisa.util.BaseMessage.ASR_MESSAGE;
 import static com.lihao.lisa.util.BaseMessage.WAKEUP_MESSAGE;
 import static com.lihao.lisa.util.BaseMessage.WEATHER_MESSAGE;
 import static com.lihao.lisa.util.TTSMessage.TTS_STATUS_INPUT_TEXT_FINISHED;
 import static com.lihao.lisa.util.TTSMessage.TTS_STATUS_INPUT_TEXT_SELECTION;
-import static com.lihao.lisa.util.TTSMessage.TTS_STATUS_SYNTHES_TEXT_FINISHED;
 
 public class LisaMainState extends StateMachine {
     private static final String TAG = "LisaMainState";
@@ -76,7 +60,7 @@ public class LisaMainState extends StateMachine {
 
     //Define the instance of components
     private BaseTTS mTTSInstance = null;
-    private MyRecognizer mRecognizer = null;
+    private BaiduRecognizer mRecognizer = null;
     private BaiduWakeup mWakeup = null;
     private Handler mHandler = null;  //Define the handler of ASR engine
     private Dispatcher mDispatcher = null;
@@ -216,7 +200,7 @@ public class LisaMainState extends StateMachine {
 
     private boolean initRecognizer(){
         IRecogListener listener = new MessageStatusRecogListener(mHandler);
-        mRecognizer = new MyRecognizer(mContext, listener);
+        mRecognizer = BaiduRecognizer.getInstance(mContext, listener);
         return true;
     }
 
@@ -239,11 +223,8 @@ public class LisaMainState extends StateMachine {
 
     private void startASR()
     {
-        Map<String, Object> params = new HashMap<String,Object>();
-        params.put("pid",15373);
-        params.put("accept-audio-volume",false);
-        Log.d(TAG, "startASR: params: " + params);
-        mRecognizer.start(params);
+        Log.d(TAG, "startASR()");
+        mRecognizer.start(null);
     }
 
     private void ProcessAsrMessage(Message msg) {

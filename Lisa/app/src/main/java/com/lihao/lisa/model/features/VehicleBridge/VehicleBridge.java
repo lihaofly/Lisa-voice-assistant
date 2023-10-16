@@ -30,8 +30,8 @@ public class VehicleBridge {
 
     public void Connect(String device){
         Log.d(TAG, "Connect: start");
-        BluetoothDevice device1 = mBluetoothAdapter.getRemoteDevice(device);
-        mChatService.connect(device1, false);
+        //BluetoothDevice device1 = mBluetoothAdapter.getRemoteDevice(device);
+        //mChatService.connect(device1, false);
     }
 
     public void SendMessage(String msg){

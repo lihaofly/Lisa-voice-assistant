@@ -1,5 +1,6 @@
 Version of com.baidu.speech.jar:
-bdasr_V3_20210521_0ddfe93.jar
+bdasr_V3_20210628_cfe8c44.jar
 
 Version of com.baidu.tts.jar:
-com.baidu.tts_2.6.2.2.20200629_44818d4.jar
+com.baidu.tts_2.6.3.c2aaa9f_20220922113422.jar
+#com.baidu.tts_2.6.2.2.20200629_44818d4.jar

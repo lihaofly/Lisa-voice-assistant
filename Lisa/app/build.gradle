@@ -3,6 +3,14 @@ plugins {
 }
 
 android {
+//    signingConfigs {
+//        personalsign {
+//            storeFile file('C:\\Users\\haoli2\\Documents\\03_ProjectCode\\02_VR\\Lisa\\Lisa_KeyStore\\android.jks')
+//            storePassword 'xxxxxx'
+//            keyPassword 'xxxxxx'
+//            keyAlias 'LisaAlias'
+//        }
+//    }
 
     compileSdkVersion 28
     buildToolsVersion "29.0.3"
@@ -13,6 +21,10 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        ndk {
+            abiFilters "armeabi"
+            abiFilters "armeabi-v7a"
+        }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 //        signingConfig signingConfigs.personalsign
@@ -48,7 +60,7 @@ android {
             }
 
             jniLibs {
-                srcDirs 'src\\main\\jniLibs', 'src\\main\\java\\com\\lihao\\lisa\\model\\core\\BaiduSolution\\jniLibs'
+                srcDirs 'src\\main\\jniLibs', 'src\\main\\java\\com\\lihao\\lisa\\model\\core\\BaiduSolution\\jniLibs', 'src\\main\\java\\com\\lihao\\lisa\\model\\core\\BaiduSolution\\tts\\jniLibs'
             }
         }
     }
@@ -56,6 +68,7 @@ android {
     packagingOptions{
         doNotStrip "*/*/libvad.dnn.so"
         doNotStrip "*/*/libbd_easr_s1_merge_normal_20151216.dat.so"
+        doNotStrip "*/*/libBaiduSpeechSDK.so"
     }
 }
 

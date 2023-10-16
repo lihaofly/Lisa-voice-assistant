@@ -53,14 +53,14 @@
         <!--BaiduSolution needed permission start-->
         <meta-data
             android:name="com.baidu.speech.APP_ID"
-            android:value="xxxxxx"/>
+            android:value="40986487"/>
 
         <meta-data
             android:name="com.baidu.speech.API_KEY"
-            android:value="xxxxxx"/>
+            android:value="Bro7D9iTG5V0kWhi6jT2Qh1q"/>
         <meta-data
             android:name="com.baidu.speech.SECRET_KEY"
-            android:value="xxxxxxx"/>
+            android:value="kMu7u7THG7pzFhMmlnVSTlnh4Qj2A78I"/>
         <!--BaiduSolution needed permission start-->
     </application>
 

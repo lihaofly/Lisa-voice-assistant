@@ -20,7 +20,7 @@ import com.baidu.tts.client.SpeechSynthesizer;
 import com.baidu.tts.client.SpeechSynthesizerListener;
 import com.baidu.tts.client.TtsMode;
 import com.lihao.lisa.R;
-import com.lihao.lisa.model.core.baidu.tts.control.InitConfig;
+import com.lihao.lisa.model.core.baidu.tts.util.InitConfig;
 import com.lihao.lisa.model.core.baidu.tts.listener.UiMessageListener;
 import com.lihao.lisa.model.core.baidu.tts.util.Auth;
 import com.lihao.lisa.model.core.baidu.tts.util.AutoCheck;

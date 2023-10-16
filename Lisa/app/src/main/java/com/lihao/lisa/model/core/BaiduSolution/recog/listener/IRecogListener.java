@@ -1,12 +1,12 @@
-package com.baidu.aip.asrwakeup3.core.recog.listener;
-
-import com.baidu.aip.asrwakeup3.core.recog.RecogResult;
+package com.lihao.lisa.model.core.BaiduSolution.recog.listener;
 
 /**
+ * Interface of asr status and result. Copy from Baidu Demo
  * 与SDK中回调参数的对应关系定义在RecogEventAdapter类中
  */
 
 public interface IRecogListener {
+
 
     /**
      * CALLBACK_EVENT_ASR_READY
