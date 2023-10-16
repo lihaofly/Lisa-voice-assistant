@@ -22,11 +22,11 @@ public class AuthUtil {
     }
     public static String getAk(){
         //Add apiKey
-        return "Bro7D9iTG5V0kWhi6jT2Qh1q";
+        return "xxxxxx";
     }
     public static String getSk(){
         //Add secretKey
-        return  "kMu7u7THG7pzFhMmlnVSTlnh4Qj2A78I";
+        return  "xxxxxx";
     }
 
     public static Map<String, Object> getParam(){
