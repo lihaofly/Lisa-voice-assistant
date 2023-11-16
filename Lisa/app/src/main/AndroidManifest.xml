@@ -44,23 +44,20 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".model.core.baidu.tts.TTSTestActivity"
-            android:label="精简版合成" />
-        <activity
             android:name=".view.SettingActivity"
             android:label="Setting Activity" />
 
         <!--BaiduSolution needed permission start-->
         <meta-data
             android:name="com.baidu.speech.APP_ID"
-            android:value="40986487"/>
+            android:value="XXXX"/>
 
         <meta-data
             android:name="com.baidu.speech.API_KEY"
-            android:value="Bro7D9iTG5V0kWhi6jT2Qh1q"/>
+            android:value="Bro7D9iTG5V0XXXX"/>
         <meta-data
             android:name="com.baidu.speech.SECRET_KEY"
-            android:value="kMu7u7THG7pzFhMmlnVSTlnh4Qj2A78I"/>
+            android:value="kMu7u7THG7pzXXXX"/>
         <!--BaiduSolution needed permission start-->
     </application>
 

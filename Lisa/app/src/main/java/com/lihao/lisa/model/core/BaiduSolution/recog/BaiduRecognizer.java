@@ -1,14 +1,17 @@
 package com.lihao.lisa.model.core.BaiduSolution.recog;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.HashMap;
 import android.content.Context;
 import org.json.JSONObject;
 
+import com.baidu.tts.client.SpeechSynthesizer;
+import com.baidu.tts.client.TtsMode;
+import com.lihao.lisa.model.util.config.Config;
 import com.lihao.lisa.util.MyLogger;
 import com.lihao.lisa.model.core.BaiduSolution.recog.listener.IRecogListener;
 import com.lihao.lisa.model.core.BaiduSolution.recog.listener.RecogEventListener;
-import com.lihao.lisa.model.core.baidu.auth.AuthUtil;
 
 import com.baidu.speech.EventListener;
 import com.baidu.speech.EventManager;
@@ -24,6 +27,12 @@ public class BaiduRecognizer {
     private EventListener eventListener;
     private static boolean isOfflineEngineLoaded = false;
     private static volatile boolean isInited = false;
+    private Context mContext;
+
+    private String mAppId;
+    private String mAppKey;
+    private String mSecretKey;
+    private String mSN;
 
     private static BaiduRecognizer sInStance = null;
 
@@ -59,6 +68,8 @@ public class BaiduRecognizer {
             MyLogger.error(TAG, "Didn't release(), Don't create new instance");
             throw new RuntimeException("Didn't release(), Don't create new instance");
         }
+        mContext = context;
+        loadConfig(context);
         isInited = true;
         this.eventListener = eventListener;
         // Init EventManager of ASR. Only support one instance.
@@ -89,10 +100,12 @@ public class BaiduRecognizer {
         if (!isInited) {
             throw new RuntimeException("release() was called");
         }
-        Map<String, Object> tempParams = new HashMap<>();
+        Map<String, Object> tempParams = new LinkedHashMap<String, Object>();
 
         if(null == params) {
-            tempParams = AuthUtil.getParam();
+            tempParams.put(SpeechConstant.APP_ID, mAppId);
+            tempParams.put(SpeechConstant.APP_KEY, mAppKey);
+            tempParams.put(SpeechConstant.SECRET, mSecretKey);
         }else{
             tempParams = params;
         }
@@ -149,6 +162,21 @@ public class BaiduRecognizer {
         asrEventManager.unregisterListener(eventListener);
         asrEventManager = null;
         isInited = false;
+    }
+
+
+    private void loadConfig(Context context){
+        if(context != null) {
+            mAppId = Config.getInstance(context).getConfigItem("BAIDU_AUTHORITY_APPID");
+            mAppKey = Config.getInstance(context).getConfigItem("BAIDU_AUTHORITY_APPKEY");
+            mSecretKey = Config.getInstance(context).getConfigItem("BAIDU_AUTHORITY_SECRETKEY");
+            mSN = Config.getInstance(context).getConfigItem("BAIDU_AUTHORITY_SN");
+            MyLogger.debug(TAG, "BaiduTTS: appID: " + mAppId +
+                    " BaiduTTS: appkey: " + mAppKey +
+                    " BaiduTTS: secretKey: " + mSecretKey +
+                    " BaiduTTS: sn: " + mSN);
+
+        }
     }
 
     /**

@@ -4,11 +4,8 @@ import android.content.Context;
 import android.os.Message;
 
 import com.lihao.lisa.model.LisaMainState;
-import com.lihao.lisa.model.core.base.FactoryTTS;
 import com.lihao.lisa.util.TTSMessage;
 import com.lihao.lisa.view.LisaView;
-
-import static com.lihao.lisa.model.core.base.FactoryTTS.AISPEECH_ONLINE_TTS;
 
 public class LisaPresenter implements BasePresenter, PresenterListener {
     private static final String TAG = "Lisa: LisaPresenter";

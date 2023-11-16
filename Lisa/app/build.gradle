@@ -3,15 +3,14 @@ plugins {
 }
 
 android {
-//    signingConfigs {
-//        personalsign {
-//            storeFile file('C:\\Users\\haoli2\\Documents\\03_ProjectCode\\02_VR\\Lisa\\Lisa_KeyStore\\android.jks')
-//            storePassword 'xxxxxx'
-//            keyPassword 'xxxxxx'
-//            keyAlias 'LisaAlias'
-//        }
-//    }
-
+    signingConfigs {
+        personalsign {
+            storeFile file('C:\\Users\\haoli2\\Documents\\03_ProjectCode\\02_VR\\Lisa\\Lisa_KeyStore\\android.jks')
+            storePassword 'xxxxxxx'
+            keyPassword 'xxxxxxx'
+            keyAlias 'LisaAlias'
+        }
+    }
     compileSdkVersion 28
     buildToolsVersion "29.0.3"
 
@@ -27,17 +26,18 @@ android {
         }
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-//        signingConfig signingConfigs.personalsign
+        signingConfig signingConfigs.personalsign
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-//            signingConfig signingConfigs.personalsign
+            signingConfig signingConfigs.personalsign
         }
         debug {
-//            signingConfig signingConfigs.personalsign
+            minifyEnabled false
+            signingConfig signingConfigs.personalsign
         }
     }
     compileOptions {
@@ -48,19 +48,35 @@ android {
     sourceSets {
         main {
             java {
-                srcDirs 'src\\main\\java', 'src\\main\\java\\util', 'src\\main\\java\\Features', 'src\\main\\java\\Features\\Weather', 'src\\main\\java\\com\\lihao\\lisa\\Features\\Weather', 'src\\main\\java\\com\\lihao\\lisa\\Features', 'src\\main\\java\\com\\lihao\\lisa\\Features\\Weahter'
+                srcDirs 'src\\main\\java',
+                        'src\\main\\java\\util',
+                        'src\\main\\java\\Features',
+                        'src\\main\\java\\Features\\Weather',
+                        'src\\main\\java\\com\\lihao\\lisa\\Features\\Weather',
+                        'src\\main\\java\\com\\lihao\\lisa\\Features',
+                        'src\\main\\java\\com\\lihao\\lisa\\Features\\Weahter'
             }
 
             res {
-                srcDirs 'src\\main\\res', 'src\\main\\res\\drawable\\weather', 'src\\main\\res\\layout\\Europe_Cup', 'src\\main\\res\\layout\\setting'
+                srcDirs 'src\\main\\res',
+                        'src\\main\\res\\drawable\\weather',
+                        'src\\main\\res\\layout\\Europe_Cup',
+                        'src\\main\\res\\layout\\setting'
             }
 
             assets {
-                srcDirs 'src\\main\\assets', 'src\\main\\assets\\wakeup', 'src\\main\\java\\com\\lihao\\lisa\\model\\core\\BaiduSolution\\assets'
+                srcDirs 'src\\main\\assets',
+                        'src\\main\\assets\\wakeup',
+                        'src\\main\\java\\com\\lihao\\lisa\\model\\core\\BaiduSolution\\assets',
+                        'src\\main\\java\\com\\lihao\\lisa\\model\\core\\iFlytek\\assets',
+                        'src\\main\\java\\com\\lihao\\lisa\\model\\core\\AISpeech\\assets'
             }
 
             jniLibs {
-                srcDirs 'src\\main\\jniLibs', 'src\\main\\java\\com\\lihao\\lisa\\model\\core\\BaiduSolution\\jniLibs', 'src\\main\\java\\com\\lihao\\lisa\\model\\core\\BaiduSolution\\tts\\jniLibs'
+                srcDirs 'src\\main\\java\\com\\lihao\\lisa\\model\\core\\BaiduSolution\\jniLibs\\recog',
+                        'src\\main\\java\\com\\lihao\\lisa\\model\\core\\BaiduSolution\\jniLibs\\tts',
+                        'src\\main\\java\\com\\lihao\\lisa\\model\\core\\iFlytek\\jniLibs\\tts',
+                        'src\\main\\java\\com\\lihao\\lisa\\model\\core\\AISpeech\\jniLibs\\tts'
             }
         }
     }
@@ -69,6 +85,8 @@ android {
         doNotStrip "*/*/libvad.dnn.so"
         doNotStrip "*/*/libbd_easr_s1_merge_normal_20151216.dat.so"
         doNotStrip "*/*/libBaiduSpeechSDK.so"
+        doNotStrip "*/*/libmsc.so"
+        doNotStrip "*/*/libw_ivw.so"
     }
 }
 

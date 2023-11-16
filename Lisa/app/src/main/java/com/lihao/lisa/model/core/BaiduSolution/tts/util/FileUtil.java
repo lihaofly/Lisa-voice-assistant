@@ -1,4 +1,4 @@
-package com.lihao.lisa.model.core.baidu.tts.util;
+package com.lihao.lisa.model.core.BaiduSolution.tts.util;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -10,7 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by fujiayi on 2017/5/19.
+ * @ClassName TTSListener
+ * @Author lihao.fly@163.com
+ * @Data 2023/10/23
+ * @Description Class to copy resourece file.Reserve for use.
  */
 
 public class FileUtil {

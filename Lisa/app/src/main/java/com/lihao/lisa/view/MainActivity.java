@@ -8,58 +8,35 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.airbnb.lottie.LottieAnimationView;
-import com.baidu.aip.asrwakeup3.core.util.AsrMessage;
-import com.google.gson.JsonObject;
 import com.lihao.lisa.R;
-import com.lihao.lisa.model.core.baidu.tts.BaiduTTS;
-import com.lihao.lisa.model.core.baidu.tts.TTSTestActivity;
-import com.lihao.lisa.model.core.iFlytek.tts.iFlytekTTS;
-import com.lihao.lisa.model.features.InformationSearch.InformationSearch;
-import com.lihao.lisa.model.features.weather.Weather;
+import com.lihao.lisa.model.core.iFlytek.tts.iFlytekSynthesizer;
 import com.lihao.lisa.presenter.LisaPresenter;
-import com.lihao.lisa.util.ASRMessage;
-import com.lihao.lisa.util.AssistantMessage;
 import com.lihao.lisa.util.BaseMessage;
 import com.lihao.lisa.util.GuideMessage;
 import com.lihao.lisa.util.TTSMessage;
-import com.lihao.lisa.util.WeatherMessage;
-import com.lihao.lisa.view.util.FadingEdgeTopRecyclerView;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
-
-import static com.lihao.lisa.util.BaseMessage.WEATHER_MESSAGE;
-import static com.lihao.lisa.util.TTSMessage.TTS_STATUS_INPUT_TEXT_FINISHED;
-import static com.lihao.lisa.util.TTSMessage.TTS_STATUS_SYNTHES_TEXT_FINISHED;
-import static com.lihao.lisa.view.util.User.USER_TYPE_RECIEVER;
-import static com.lihao.lisa.view.util.User.USER_TYPE_SENDER;
-import static com.lihao.lisa.view.util.User.USER_TYPE_WEATHER;
 
 
 public class MainActivity extends AppCompatActivity implements LisaView {
@@ -69,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements LisaView {
     private LisaPresenter mPresenter;
     private TextView mPowerDecl;
     String strTemp;
-    private iFlytekTTS iflytekTTS;
+    private iFlytekSynthesizer iflytekTTS;
     ActivityResultLauncher mSettingLauncher = registerForActivityResult(new ResultContract(), new ActivityResultCallback<String>() {
         @Override
         public void onActivityResult(String result) {
@@ -351,7 +328,6 @@ public class MainActivity extends AppCompatActivity implements LisaView {
         }else if(input.startsWith("5")){
         }else if(input.startsWith("6")){
         }else if(input.startsWith("7")){
-            startActivity(new Intent(this, TTSTestActivity.class));
         }else{
         }
     }

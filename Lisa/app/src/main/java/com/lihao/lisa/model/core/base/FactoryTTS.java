@@ -2,28 +2,28 @@ package com.lihao.lisa.model.core.base;
 
 import android.util.Log;
 
-import com.lihao.lisa.model.core.AISpeech.tts.AISpeechTTS;
-import com.lihao.lisa.model.core.baidu.tts.BaiduTTS;
-import com.lihao.lisa.model.core.iFlytek.tts.iFlytekTTS;
+import com.lihao.lisa.model.core.AISpeech.tts.AISpeechSynthesizer;
+import com.lihao.lisa.model.core.BaiduSolution.tts.BaiduSynthesizer;
+import com.lihao.lisa.model.core.iFlytek.tts.iFlytekSynthesizer;
 
 public class FactoryTTS {
-    public static final String BAIDU_ONLINE_TTS = "BaiduOnlineTTS";
-    public static final String IFLYTEK_ONLINE_TTS = "iFlytekOnlineTTS";
-    public static final String AISPEECH_ONLINE_TTS = "AISPEECHOnlineTTS";
+    public static final String BAIDU_TTS = "BaiduTTS";
+    public static final String IFLYTEK_TTS = "iFlytekTTS";
+    public static final String AISPEECH_TTS = "AISpeechTTS";
     private static final String TAG = "FactoryTTS";
 
-    public static BaseTTS CreateTTS(String ttsType){
-        BaseTTS tts = null;
+    public static BaseSynthesizer CreateTTS(String ttsType){
+        BaseSynthesizer tts = null;
         if(ttsType == null){
             tts = null;
         }
 
-        if(ttsType.equalsIgnoreCase(BAIDU_ONLINE_TTS)){
-            tts = BaiduTTS.getInstance();
-        }else if(ttsType.equalsIgnoreCase(IFLYTEK_ONLINE_TTS)){
-            tts = iFlytekTTS.getInstance();
-        }else if(ttsType.equalsIgnoreCase(AISPEECH_ONLINE_TTS)){
-            tts = AISpeechTTS.getInstance();
+        if(ttsType.equalsIgnoreCase(BAIDU_TTS)){
+            tts = BaiduSynthesizer.getInstance();
+        }else if(ttsType.equalsIgnoreCase(IFLYTEK_TTS)){
+            tts = iFlytekSynthesizer.getInstance();
+        }else if(ttsType.equalsIgnoreCase(AISPEECH_TTS)){
+            tts = AISpeechSynthesizer.getInstance();
         }else{
             Log.e(TAG, "CreateTTS: Not support type");
         }

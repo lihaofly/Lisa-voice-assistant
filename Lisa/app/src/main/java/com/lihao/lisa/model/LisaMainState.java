@@ -10,9 +10,11 @@ import androidx.annotation.NonNull;
 import com.lihao.lisa.model.core.BaiduSolution.recog.BaiduRecognizer;
 import com.lihao.lisa.model.core.BaiduSolution.recog.listener.IRecogListener;
 import com.lihao.lisa.model.core.BaiduSolution.recog.listener.MessageStatusRecogListener;
+import com.lihao.lisa.model.core.BaiduSolution.util.BaiduException;
 import com.lihao.lisa.model.core.BaiduSolution.wakeup.BaiduWakeup;
-import com.lihao.lisa.model.core.base.BaseTTS;
+import com.lihao.lisa.model.core.base.BaseSynthesizer;
 import com.lihao.lisa.model.core.base.FactoryTTS;
+import com.lihao.lisa.model.util.config.Config;
 import com.lihao.lisa.model.util.statemachine.State;
 import com.lihao.lisa.model.util.statemachine.StateMachine;
 import com.lihao.lisa.presenter.PresenterListener;
@@ -34,9 +36,9 @@ import static com.lihao.lisa.model.core.BaiduSolution.recog.listener.IStatus.STA
 import static com.lihao.lisa.model.core.BaiduSolution.recog.listener.IStatus.STATUS_READY;
 import static com.lihao.lisa.model.core.BaiduSolution.recog.listener.IStatus.STATUS_RECOGNITION;
 import static com.lihao.lisa.model.core.BaiduSolution.recog.listener.IStatus.STATUS_SPEAKING;
-import static com.lihao.lisa.model.core.base.FactoryTTS.AISPEECH_ONLINE_TTS;
-import static com.lihao.lisa.model.core.base.FactoryTTS.BAIDU_ONLINE_TTS;
-import static com.lihao.lisa.model.core.base.FactoryTTS.IFLYTEK_ONLINE_TTS;
+import static com.lihao.lisa.model.core.base.FactoryTTS.AISPEECH_TTS;
+import static com.lihao.lisa.model.core.base.FactoryTTS.BAIDU_TTS;
+import static com.lihao.lisa.model.core.base.FactoryTTS.IFLYTEK_TTS;
 import static com.lihao.lisa.util.BaseMessage.EUROPECUP_MESSAGE;
 import static com.lihao.lisa.util.BaseMessage.EXCUTE_MESSAGE;
 import static com.lihao.lisa.util.BaseMessage.TTS_MESSAGE;
@@ -59,7 +61,7 @@ public class LisaMainState extends StateMachine {
     PresenterListener mListener = null;
 
     //Define the instance of components
-    private BaseTTS mTTSInstance = null;
+    private BaseSynthesizer mTTSInstance = null;
     private BaiduRecognizer mRecognizer = null;
     private BaiduWakeup mWakeup = null;
     private Handler mHandler = null;  //Define the handler of ASR engine
@@ -179,11 +181,11 @@ public class LisaMainState extends StateMachine {
         if(!text.equals(mTTSInstance.GetTTSEngineName())){
             mTTSInstance.Destroy();
             if(text.equals("iFlytek")){
-                mTTSInstance = FactoryTTS.CreateTTS(IFLYTEK_ONLINE_TTS);
+                mTTSInstance = FactoryTTS.CreateTTS(IFLYTEK_TTS);
             }else if(text.equals("baidu")){
-                mTTSInstance = FactoryTTS.CreateTTS(BAIDU_ONLINE_TTS);
+                mTTSInstance = FactoryTTS.CreateTTS(BAIDU_TTS);
             }else if(text.equals("AISpeech")){
-                mTTSInstance = FactoryTTS.CreateTTS(AISPEECH_ONLINE_TTS);
+                mTTSInstance = FactoryTTS.CreateTTS(AISPEECH_TTS);
             }else{
                 Log.e(TAG, "ChangeTTSEngine: Not match");
             }
@@ -193,6 +195,8 @@ public class LisaMainState extends StateMachine {
             } catch (CertificateEncodingException e) {
                 e.printStackTrace();
             } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            } catch (BaiduException e) {
                 e.printStackTrace();
             }
         }
@@ -210,8 +214,8 @@ public class LisaMainState extends StateMachine {
         return true;
     }
 
-    private boolean initTTS() throws NoSuchAlgorithmException, CertificateEncodingException {
-        mTTSInstance = FactoryTTS.CreateTTS(BAIDU_ONLINE_TTS);
+    private boolean initTTS() throws NoSuchAlgorithmException, CertificateEncodingException, BaiduException {
+        mTTSInstance = FactoryTTS.CreateTTS(Config.getInstance(mContext).getConfigItem("DEFAULT_SYNTHESIZER_ENGINE"));
         mTTSInstance.InitializeTTS(mContext, mHandler);
         return true;
     }
@@ -350,6 +354,8 @@ public class LisaMainState extends StateMachine {
             } catch (NoSuchAlgorithmException e) {
                 e.printStackTrace();
             } catch (CertificateEncodingException e) {
+                e.printStackTrace();
+            } catch (BaiduException e) {
                 e.printStackTrace();
             }
 
